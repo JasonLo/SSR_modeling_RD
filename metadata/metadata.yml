@@ -1,0 +1,21 @@
+metadata_version: 1
+name: Using computational modeling to understand the interaction between risk and protective factors in reading disability
+description: Computational simulations of learning to read in the “triangle model” framework have contributed to our understanding of typical and atypical reading development. Manipulations of simulation parameters, such as the degree of noise in the phonological system, the number of processing (hidden) units, and the rate of learning have been used to show how differences in relevant perceptual and cognitive capacities can contribute to different forms of reading disability. Here we examine how graded, orthogonal variability in these “control parameters” influences performance across a broad range. We considered how variability in these parameters interact to produce different patterns of performance across a range of word and pseudoword stimuli over the course of training. Results were broadly consistent with expectations — noise in the phonological layer leads to worse performance on pseudowords and restricting the number of hidden units lead to worse performance for inconsistent words. One surprising result was that increasing the number of hidden units can dramatically mitigate the influence of phonological noise. Then, we expanded the range of control parameter values to identify particular combinations of parameters that produce “cases” of widely recognized categories of reading disability (phonological and surface dyslexia) and to show how these cases sit on a continuum with more typical development. The results demonstrate the importance of considering changes in performance over time to predict whether a struggling reader is likely to achieve typical levels of reading ability or have a longer-lasting reading disability.
+tags:
+- computational modeling
+- triangle model
+- reading disability
+- individual differences
+authors:
+- name: Jason C. M. Lo
+  affiliations:
+  - name: Haskins Laboratories, CT, USA
+- name: Jay G. Rueckl
+  affiliations:
+  - name: University of Connecticut
+- name: Jason D. Zevin
+  affiliations:
+  - name: University of Southern California
+corresponding_contributor:
+  name: Jason C. M. Lo
+  email: jason.lo@yale.edu
