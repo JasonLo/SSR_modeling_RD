@@ -51,6 +51,10 @@ class RawData:
             inplace=True,
         )
 
+        # We only use accuracy in this paper, so we only select that measure
+        df = df.loc[df.measure=="Accuracy"]
+
+        # Add origin data point (for nicer plots)
         df = self._add_origin(df)
 
         # Change type to word and nonword label
