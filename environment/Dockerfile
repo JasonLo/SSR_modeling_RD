@@ -1,4 +1,4 @@
-# hash:sha256:d455223f7b4773391af5baadbac1d5c8d6332b34e1d9c1b4aa7592b7143bbef2
+# hash:sha256:02aabadb5a208414836af8e1b98f864ac87787dc521bc7a2292fc80c919573b5
 FROM registry.codeocean.com/codeocean/miniconda3:4.8.2-python3.8-ubuntu18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -22,15 +22,21 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys \
         rstudio-server=1.2.5033 \
     && rm -rf /var/lib/apt/lists/*
 
+RUN conda install -y \
+        jupyterlab==3.0.14 \
+    && conda clean -ya
+
 RUN pip install -U --no-cache-dir \
-    altair
+    altair==4.1.0 \
+    matplotlib \
+    scipy
 
 RUN echo 'options(repos = c(CRAN = "https://cloud.r-project.org/"), download.file.method = "libcurl")' >> $(Rscript -e 'cat(R.home())')/etc/Rprofile.site \
     && echo 'options(Ncpus = parallel::detectCores())' >> $(Rscript -e 'cat(R.home())')/etc/Rprofile.site \
     && Rscript -e 'options(warn=2); install.packages("remotes")'
-RUN Rscript -e 'remotes::install_version("effectsize")' \
-    && Rscript -e 'remotes::install_version("insight")' \
+RUN Rscript -e 'remotes::install_version("effectsize", "0.4.5")' \
+    && Rscript -e 'remotes::install_version("insight", "0.14.2")' \
     && Rscript -e 'remotes::install_version("lme4")' \
     && Rscript -e 'remotes::install_version("lmerTest")' \
-    && Rscript -e 'remotes::install_version("rlang")' \
+    && Rscript -e 'remotes::install_version("rlang", "0.4.11")' \
     && Rscript -e 'remotes::install_version("sjPlot")'
