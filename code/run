@@ -2,11 +2,12 @@
 set -ex
 
 # This is the master script for the capsule. When you click "Reproducible Run", the code in this file will execute.
-Rscript -e "rmarkdown::render(input = 'r/figure3_and_lme.rmd', output_dir = '../results', clean = TRUE)"
-   
-jupyter nbconvert \
-  --to html
-  --ExecutePreprocessor.allow_errors=True \
-  --ExecutePreprocessor.timeout=-1 \
-  --FilesWriter.build_directory=../results \
-  --execute python/figure1.ipynb
+conda install -y \
+        jupyterlab \
+    && conda clean -ya
+# Go to python code directory and run
+cd python
+
+jupyter nbconvert --to html --FilesWriter.build_directory=../../results --execute figure1.ipynb figure2.ipynb figure4.ipynb figure5.ipynb supp_interactives.ipynb supp_figure1.ipynb supp_figure2.ipynb
+
+
