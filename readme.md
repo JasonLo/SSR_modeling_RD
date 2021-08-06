@@ -6,7 +6,7 @@ For reproduceability, the codes and data in this repo can reproduce all the repo
 
 # Getting Started
 
-Option 1 (Recommanded): You can use [Codeocean](https://codeocean.com/capsule/1821081/tree) to run all our code in the cloud. Just push **Reproducible Run** button on the upper right corner to run all codes. In takes around 15 minutes to run the analysis on CodeOcean (It takes quite some time to setup the environment for my particular settings). 
+Option 1 (Recommanded): You can use [Codeocean](https://codeocean.com/capsule/1821081/tree) to run all python codes in the cloud. Just push **Reproducible Run** button on the upper right corner to run all codes. The results will be stored in results folder after running. I have trouble in configuring an environment that can smoothly run both python and r inside a single codeocean capsule, you may have to run the r codes locally.      
 
 Option 2: More advanced users can clone this repo on [Github](https://github.com/JasonLo/SSR_modeling_RD.git)
 
@@ -17,11 +17,12 @@ Option 2: More advanced users can clone this repo on [Github](https://github.com
     - python : [python](https://www.python.org/) scripts mainly for visualization
     - r : [R](https://cran.r-project.org/) scripts mainly for statistical analysis
 - results: analysis results
+- prerun_results: a snapshots of results that I ran, including both r and python parts.
 
 ## Codes organization
 
 - For the main analysis, the codes are stored in a jupyter notebook or a R Markdown document with ample annotations.  
-- To make the code easier to follow, all basic codes that are not directly relevant to the analysis logics are put inside helper.py or helper.r
+- To make the code easier to follow, all basic codes that are not directly relevant to the analysis logics are inside helper.py or helper.r
 
 
 ## Prerequisites
