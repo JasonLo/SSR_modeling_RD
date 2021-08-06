@@ -1,0 +1,143 @@
+---
+title: "Inferential statistics (LME) and Figure 3"
+author: "Jason Lo"
+date: "20210806"
+output:
+  html_document:
+    df_print: paged
+    theme: united
+---
+
+# Analyses {.tabset}
+
+## Imports
+```{r, message=FALSE, warning=FALSE}
+source("helper.R")
+
+df_growth_parameters <- read.csv('../../data/growth_params_1250.csv') %>%
+    mutate(growth = log(k + 1)) %>%
+    gather("Measure", "Score",
+        mse, max_acc, growth, k, x0) %>% 
+    mutate(Lexicality = ifelse(cond %in% c("NW_AMB", "NW_UN"), "Nonword", "Word")) 
+
+# Asymptote df
+dfa <- df_growth_parameters %>% 
+    filter(Measure == "max_acc") %>%
+    droplevels() %>% 
+    mutate(scaled_p_noise = scale(p_noise)) %>% 
+    mutate(scaled_hidden_units = scale(hidden_units)) %>% 
+    mutate(scaled_learning_rate = scale(learning_rate))
+
+# Growth df
+dfg <- df_growth_parameters %>% 
+    filter(Measure == "growth") %>%
+    droplevels() %>% 
+    mutate(scaled_p_noise = scale(p_noise)) %>% 
+    mutate(scaled_hidden_units = scale(hidden_units)) %>% 
+    mutate(scaled_learning_rate = scale(learning_rate))
+```
+
+## Lexicality effect on growth parameters
+
+### Asymptote
+```{r}
+my_lmer("Score ~ Lexicality", dfa)
+```
+
+### Growth
+```{r}
+my_lmer("Score ~ Lexicality", dfg)
+```
+
+## Table 1
+The Effects of Control Parameters on Word and Nonword asymptote  
+
+Import data for table 1
+```{r}
+# Word asymptote
+dfa_word <- dfa %>% filter(Lexicality == "Word")
+
+# Nonword asymptote
+dfa_nonword <- dfa %>% filter(Lexicality == "Nonword")
+
+```
+
+### Word
+```{r}
+my_lmer("Score ~ scaled_p_noise * scaled_hidden_units * scaled_learning_rate", dfa_word)
+```
+
+### Nonword
+```{r}
+my_lmer("Score ~ scaled_p_noise * scaled_hidden_units * scaled_learning_rate", dfa_nonword)
+```
+
+
+
+
+
+## Table 2
+The Effect of Control Parameters on Word and Nonword Growth Parameter 
+
+Import data for table 2
+```{r}
+# Word growth rate
+dfg_word <- dfg %>% filter(Lexicality == "Word")
+
+# Nonword growth rate
+dfg_nonword <- dfg %>% filter(Lexicality == "Nonword")
+```
+
+### Word
+```{r}
+my_lmer("Score ~ scaled_p_noise * scaled_hidden_units * scaled_learning_rate", dfg_word)
+```
+
+### Nonword
+```{r}
+my_lmer("Score ~ scaled_p_noise * scaled_hidden_units * scaled_learning_rate", dfg_nonword)
+```
+
+
+## Figure 3
+
+```{r}
+fig3_model <- lmer("Score ~ p_noise * hidden_units * learning_rate * Lexicality + (1|code_name)", dfg)
+interaction_plots <- plot_model(fig3_model, type="int")
+interaction_plots[8][[1]] + 
+  labs(x="P-Noise", y="Growth Paramerter") +
+  ggtitle("")+
+  theme_minimal()
+```
+
+## Supplementary table 1
+
+Import data for supplementary table 1
+```{r}
+df_eot <- read.csv('../../data/data_part1_1250.csv') %>%
+    rename(code_name = ID,
+           epoch = Trial.Scaled,
+           hidden_units = Hidden,
+           p_noise = Pnoise,
+           learning_rate = Epsilon,
+           cond = Type) %>% 
+    filter(Measure == "Accuracy") %>% 
+    filter(epoch == 1.0) %>% 
+    mutate(Lexicality = ifelse(cond %in% c("NW_AMB", "NW_UN"), "Nonword", "Word")) %>% 
+    mutate(scaled_p_noise = scale(p_noise)) %>% 
+    mutate(scaled_hidden_units = scale(hidden_units)) %>% 
+    mutate(scaled_learning_rate = scale(learning_rate))
+
+df_eot_word <- df_eot %>% filter(Lexicality == "Word")
+df_eot_nonword <- df_eot %>% filter(Lexicality == "Nonword")
+```
+
+### Word
+```{r}
+my_lmer("Score ~ scaled_p_noise * scaled_hidden_units * scaled_learning_rate", df_eot_word)
+```
+
+### Nonword
+```{r}
+my_lmer("Score ~ scaled_p_noise * scaled_hidden_units * scaled_learning_rate", df_eot_nonword)
+```
