@@ -1,0 +1,7 @@
+tidyverse
+effectsize
+insight
+lme4
+lmerTest
+sjPlot
+rlang
