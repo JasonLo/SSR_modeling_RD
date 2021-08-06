@@ -6,7 +6,7 @@ For reproduceability, the codes and data in this repo can reproduce all the repo
 
 # Getting Started
 
-Option 1 (Recommanded): You can use [Codeocean](https://codeocean.com/capsule/1821081/tree) to run all our code in the cloud. Just push **Reproducible Run** button on the upper right corner to run all codes.
+Option 1 (Recommanded): You can use [Codeocean](https://codeocean.com/capsule/1821081/tree) to run all our code in the cloud. Just push **Reproducible Run** button on the upper right corner to run all codes. In takes around 15 minutes to run the analysis on CodeOcean (It takes quite some time to setup the environment for my particular settings). 
 
 Option 2: More advanced users can clone this repo on [Github](https://github.com/JasonLo/SSR_modeling_RD.git)
 
