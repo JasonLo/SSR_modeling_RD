@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -ex
+
+# This is the master script for the capsule. When you click "Reproducible Run", the code in this file will execute.
+
+# Go to python code directory and run
+cd python
+jupyter nbconvert --to html --FilesWriter.build_directory=../../results --execute figure1.ipynb figure2.ipynb figure4.ipynb figure5.ipynb supp_interactives.ipynb supp_figure1.ipynb supp_figure2.ipynb
+
+
