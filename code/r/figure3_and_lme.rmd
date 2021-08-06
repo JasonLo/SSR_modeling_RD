@@ -110,7 +110,7 @@ interaction_plots[8][[1]] +
   theme_minimal()
 ```
 
-## Supplementary table 1
+## Supplementary statistics
 
 Import data for supplementary table 1
 ```{r}
@@ -131,6 +131,35 @@ df_eot <- read.csv('../../data/data_part1_1250.csv') %>%
 df_eot_word <- df_eot %>% filter(Lexicality == "Word")
 df_eot_nonword <- df_eot %>% filter(Lexicality == "Nonword")
 ```
+
+### Frequency by consistency effect at the end of training
+```{r}
+my_lmer("Score ~ Freq * Cons", df_eot_word)
+```
+
+Consistency effect in low frequency words
+```{r}
+my_lmer("Score ~ Cons", filter(df_eot_word, Freq=="LF"))
+```
+Consistency effect in high frequency words
+```{r}
+my_lmer("Score ~ Cons", filter(df_eot_word, Freq=="HF"))
+```
+### Lexicality effect
+```{r}
+my_lmer("Score ~ Lexicality", df_eot)
+```
+
+
+
+## Supplementary table 1
+
+Lexicality
+```{r}
+my_lmer("Score ~ Lexicality")
+```
+
+
 
 ### Word
 ```{r}
