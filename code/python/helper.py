@@ -73,7 +73,9 @@ class RawData:
         self,
         code_name: int = None,
         cond: str = None,
+        word_type: str = None,
         measure: str = "Accuracy",
+        epoch_equal: float = None,
         epoch_less_than: float = None,
         remove_zero: bool = False,
     ) -> pd.DataFrame:
@@ -83,8 +85,12 @@ class RawData:
             df = df.loc[df.code_name == code_name]
         if cond is not None:
             df = df.loc[df.cond == cond]
+        if word_type is not None:
+            df = df.loc[df.type == word_type]
         if measure is not None:
             df = df.loc[df.measure == measure]
+        if epoch_equal is not None:
+            df = df.loc[df.epoch == epoch_equal]
         if epoch_less_than is not None:
             df = df.loc[df.epoch <= epoch_less_than]
         if remove_zero:
