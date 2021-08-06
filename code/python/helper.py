@@ -4,6 +4,7 @@ import altair as alt
 from typing import Callable
 from scipy.optimize import curve_fit
 
+
 alt.data_transformers.disable_max_rows()
 
 
@@ -75,7 +76,7 @@ class RawData:
         measure: str = "Accuracy",
         epoch_less_than: float = None,
         remove_zero: bool = False,
-    ):
+    ) -> pd.DataFrame:
         """Convienient function for getting a subset of data"""
         df = self.df.copy()
         if code_name is not None:
@@ -129,7 +130,7 @@ class GrowthModel:
         self.pred = self.growth_function(self.xdata, *self.params)
         self.mse = np.mean(np.square(self.pred - self.ydata))
 
-    def predict(self, x: list = None):
+    def predict(self, x: list = None) -> list:
         """Use fitted equation to predict y (with mean squared error)"""
         if x is None:
             x = self.xdata
@@ -141,7 +142,7 @@ class GrowthModel:
 
         return pred
 
-    def make_plot_data(self):
+    def make_plot_data(self) -> pd.DataFrame:
         """Compile plot data"""
 
         self.df_actual = pd.DataFrame(
@@ -158,7 +159,7 @@ class GrowthModel:
 
         return pd.concat([self.df_actual, self.df_pred], ignore_index=True)
 
-    def plot(self):
+    def plot(self) -> alt.Chart:
         """plot predicted versus actual value in the growth model"""
         df = self.make_plot_data()
 
@@ -180,8 +181,9 @@ class GrowthModel:
         )
 
 
-
-def alt_diagonal(x_label:str="Word", y_label:str="Nonword", color:str="#D3D3D3") -> alt.Chart:
+def alt_diagonal(
+    x_label: str = "Word", y_label: str = "Nonword", color: str = "#D3D3D3"
+) -> alt.Chart:
     """Make a diagonal line altair plot"""
     return (
         alt.Chart(pd.DataFrame({"x": [0, 1], "y": [0, 1]}))
@@ -192,7 +194,8 @@ def alt_diagonal(x_label:str="Word", y_label:str="Nonword", color:str="#D3D3D3")
         )
     )
 
-def apply_font_size(plot: alt.Chart, font_size:int=18)->alt.Chart:
+
+def apply_font_size(plot: alt.Chart, font_size: int = 18) -> alt.Chart:
     """Applying font size to altair chart"""
     return (
         plot.configure_axis(labelFontSize=font_size, titleFontSize=font_size)
@@ -203,33 +206,91 @@ def apply_font_size(plot: alt.Chart, font_size:int=18)->alt.Chart:
         )
     )
 
-def parse_df(df):
+
+def control_space_heatmap(
+    df,
+    title,
+    var,
+    color_scheme,
+    domain,
+    font_size=18,
+    epsilon_label="Epsilon",
+    pnoise_label="P-noise",
+    hide_legend=False,
+):
+    """Plotting a value (var) on control space as a heatmap, used in Figure 2 and Supplementary figures"""
+    heatmap = (
+        alt.Chart(df)
+        .mark_rect()
+        .encode(
+            x=alt.X("p_noise:O", title=pnoise_label),
+            y=alt.Y("hidden_units:O", sort="descending", title="Hidden"),
+            column=alt.Row("learning_rate:O", sort="descending", title=epsilon_label),
+            color=alt.Color(
+                var,
+                scale=alt.Scale(scheme=color_scheme, domain=domain),
+                title=None,
+            ),
+        )
+        .properties(title=title)
+    )
+
+    heatmap = apply_font_size(heatmap, font_size)
+
+    if hide_legend:
+        heatmap = heatmap.encode(
+            color=alt.Color(
+                var,
+                scale=alt.Scale(scheme=scheme, domain=domain),
+                title=color_label,
+                legend=None,
+            )
+        )
+
+    return heatmap
+
+
+def parse_df(df: pd.DataFrame) -> pd.DataFrame:
     """Parsing the raw dataframe for plotting
     1. Mean within word (HF_INC, HF_CON, LF_INC, LF_CON) and nonword (NW_UN, NW_AMB)
     2. Add a cell code to indicate control space location
     """
-    group_vars = ["code_name", "hidden_units", "p_noise", 
-        "learning_rate", "epoch", "type"]
+    group_vars = [
+        "code_name",
+        "hidden_units",
+        "p_noise",
+        "learning_rate",
+        "epoch",
+        "type",
+    ]
 
     df = df.groupby(group_vars).mean().reset_index()
 
     # Create a cell_code variable for later use in inteactive plot's selector
     df["cell_code"] = (
-                "h"
-                + df.hidden_units.astype(str)
-                + "_p"
-                + df.p_noise.astype(str)
-                + "_l"
-                + df.learning_rate.astype(str)
-            )
+        "h"
+        + df.hidden_units.astype(str)
+        + "_p"
+        + df.p_noise.astype(str)
+        + "_l"
+        + df.learning_rate.astype(str)
+    )
 
     return df
 
-def long_to_wide(df):
+
+def long_to_wide(df: pd.DataFrame) -> pd.DataFrame:
     """Convert a long dataframe to wide format for plotting performance space
-    Covnert word / nonword from row to column 
+    Covnert word / nonword from row to column
     """
-    index_vars = ["code_name", "cell_code", "hidden_units", "p_noise", "learning_rate", "epoch"]
+    index_vars = [
+        "code_name",
+        "cell_code",
+        "hidden_units",
+        "p_noise",
+        "learning_rate",
+        "epoch",
+    ]
     wide_df = df.pivot_table(index=index_vars, columns="type").reset_index()
 
     wide_df.columns = wide_df.columns = [
@@ -239,7 +300,7 @@ def long_to_wide(df):
 
 
 class InteractivePlot:
-    def __init__(self, df):
+    def __init__(self, df: pd.DataFrame):
 
         # Parsed dataframes
         self.df = parse_df(df)
@@ -247,16 +308,14 @@ class InteractivePlot:
         self.wide_df = self._remove_extra_zeros(self.wide_df)
 
     @staticmethod
-    def _remove_extra_zeros(df):       
-        """ Keep only one zero data point to avoid LOESS regression overfitting on it 
-            (Only for wide format dataframe)
+    def _remove_extra_zeros(df: pd.DataFrame) -> pd.DataFrame:
+        """Keep only one zero data point to avoid LOESS regression overfitting on it
+        (Only for wide format dataframe)
         """
-        df = df.loc[
-            (df.score_nonword > 0) | (df.epoch.isin([0, 0.05, 0.3]))
-        ]
+        df = df.loc[(df.score_nonword > 0) | (df.epoch.isin([0, 0.05, 0.3]))]
         return df
 
-    def plot(self, font_size=18):
+    def plot(self, font_size: int = 18) -> alt.Chart:
         """Plotting the interactive plot"""
         max_epoch = self.df.epoch.max()
 
@@ -280,7 +339,7 @@ class InteractivePlot:
                 color=alt.Color(
                     "mean(score):Q",
                     scale=alt.Scale(domain=(0, 1), scheme="redyellowgreen"),
-                    title=f"Accuracy at {max_epoch:.1f}M sample",
+                    title=f"Accuracy at {max_epoch:.1f}M",
                 ),
                 detail="cell_code:N",
                 opacity=alt.condition(
@@ -288,7 +347,7 @@ class InteractivePlot:
                 ),
             )
             .add_selection(select_control_space)
-        ).properties(title=f"Control space")
+        ).properties(title=f"Control space (Click cell to get plots)")
 
         ### II: Developmental Space ###
 
@@ -300,7 +359,9 @@ class InteractivePlot:
                     "mean(score):Q", title="Accuracy", scale=alt.Scale(domain=(0, 1))
                 ),
                 x=alt.X(
-                    "epoch:Q", title="Sample (M)", scale=alt.Scale(domain=(0, 0.3))
+                    "epoch:Q",
+                    title="Sample (M)",
+                    scale=alt.Scale(domain=(0, max_epoch)),
                 ),
                 color=alt.Color(
                     "type:N",
