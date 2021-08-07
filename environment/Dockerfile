@@ -1,5 +1,5 @@
-# hash:sha256:88bf4daba42ded1022bdbbf4e474c459239e656c72ec503607400557986991d6
-FROM registry.codeocean.com/codeocean/miniconda3:4.7.10-cuda10.1-cudnn7-ubuntu18.04
+# hash:sha256:c9fbba972efd54286aadb1811fc2e7080abe574cb136b497133570299ce6eacc
+FROM registry.codeocean.com/codeocean/miniconda3:4.9.2-python3.8-ubuntu20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
