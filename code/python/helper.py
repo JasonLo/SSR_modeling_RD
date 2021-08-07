@@ -54,7 +54,7 @@ class RawData:
             inplace=True,
         )
 
-        # We only use accuracy in this paper, so we only select that measure
+        # We only use accuracy in this paper, so we only select this measure
         df = df.loc[df.measure == "Accuracy"]
 
         # Add origin data point (for nicer plots)
@@ -79,7 +79,7 @@ class RawData:
         epoch_less_than: float = None,
         remove_zero: bool = False,
     ) -> pd.DataFrame:
-        """Convienient function for getting a subset of data"""
+        """Convenient function for getting a subset of data"""
         df = self.df.copy()
         if code_name is not None:
             df = df.loc[df.code_name == code_name]
@@ -110,7 +110,7 @@ class GrowthModel:
         self.ydata = ydata
         self.name = name
 
-        # These arguements' value are obtained from fit()
+        # These arguments' value are obtained from fit()
         self.params = None
         self.mse = None
 
@@ -156,11 +156,7 @@ class GrowthModel:
         )
 
         self.df_pred = pd.DataFrame(
-            {
-                "set": "predicted",
-                "epoch": self.xdata,
-                "score": self.pred,
-            }
+            {"set": "predicted", "epoch": self.xdata, "score": self.pred}
         )
 
         return pd.concat([self.df_actual, self.df_pred], ignore_index=True)
@@ -272,7 +268,7 @@ def parse_df(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.groupby(group_vars).mean().reset_index()
 
-    # Create a cell_code variable for later use in inteactive plot's selector
+    # Create a cell_code variable for later use in interactive plot's selector
     df["cell_code"] = (
         "h"
         + df.hidden_units.astype(str)
@@ -287,7 +283,7 @@ def parse_df(df: pd.DataFrame) -> pd.DataFrame:
 
 def long_to_wide(df: pd.DataFrame) -> pd.DataFrame:
     """Convert a long dataframe to wide format for plotting performance space
-    Covnert word / nonword from row to column
+    Convert word / nonword from row to column
     """
     index_vars = [
         "code_name",
