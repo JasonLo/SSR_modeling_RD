@@ -2,13 +2,13 @@
 
 ## About
 
-This repository (repo) contains the supplementray materials for a manuscript titled ***Using computational modeling to understand the interaction between risk and protective factors in reading disability*** (hereinafter refereed to as "paper") submitted to [*Scientific Studies of Reading*](https://www.tandfonline.com/toc/hssr20/current). For reproducibility, the codes and data in this repo can reproduce all the reported results in our paper.
+This repository (repo) contains the supplementary materials for a manuscript titled ***Using computational modeling to understand the interaction between risk and protective factors in reading disability*** (hereinafter refereed to as "paper") submitted to [*Scientific Studies of Reading*](https://www.tandfonline.com/toc/hssr20/current). For reproducibility, the codes and data in this repo can reproduce all the reported results in our paper.
 
 ## Getting Started
 
 ### Running options
 
-1. CodeOcean (Recommended): You can use [CodeOcean](https://codeocean.com/capsule/1821081/tree) to run all python codes in the cloud. Just push *Reproducible Run* button on the upper right corner to run all codes. The results will be stored in results folder after running. I have trouble in configuring an environment that can run both python and r inside a single CodeOcean capsule, you may have to run the r codes locally or just read my outputs inside *prerun_results* folder.
+1. CodeOcean (Recommended): You can use [CodeOcean](https://codeocean.com/capsule/4507067/tree) to run all python codes in the cloud. Just push *Reproducible Run* button on the upper right corner to run all codes. The results will be stored in results folder after running. I have trouble in configuring an environment that can run both python and r inside a single CodeOcean capsule, you may have to run the r codes locally or just read my outputs inside *prerun_results* folder.
 
 2. Locally: More advanced users can clone this repo on [Github](https://github.com/JasonLo/SSR_modeling_RD.git) and run locally
 
