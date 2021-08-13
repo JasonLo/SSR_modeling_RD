@@ -18,7 +18,8 @@ df_growth_parameters <- read.csv('../../data/growth_params_1250.csv') %>%
     mutate(growth = log(k + 1)) %>%
     gather("Measure", "Score",
         mse, max_acc, growth, k, x0) %>% 
-    mutate(Lexicality = ifelse(cond %in% c("NW_AMB", "NW_UN"), "Nonword", "Word")) 
+    mutate(Lexicality = ifelse(cond %in% c("NW_AMB", "NW_UN"), "Nonword", "Word")) %>% 
+    mutate(Lexicality = factor(Lexicality, levels=c("Word", "Nonword")))
 
 # Asymptote df
 dfa <- df_growth_parameters %>% 
@@ -104,10 +105,13 @@ my_lmer("Score ~ scaled_p_noise * scaled_hidden_units * scaled_learning_rate", d
 ```{r}
 fig3_model <- lmer("Score ~ p_noise * hidden_units * learning_rate * Lexicality + (1|code_name)", dfg)
 interaction_plots <- plot_model(fig3_model, type="int")
-interaction_plots[8][[1]] + 
+
+fig3 <- interaction_plots[8][[1]] + 
   labs(x="P-Noise", y="Growth Paramerter") +
   ggtitle("")+
   theme_minimal()
+
+ggsave("../../results/figure3.jpg", width = 5, height=3, dpi=600)
 ```
 
 ## Supplementary statistics
