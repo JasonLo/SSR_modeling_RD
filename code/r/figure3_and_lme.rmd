@@ -1,7 +1,7 @@
 ---
 title: "Inferential statistics (LME) and Figure 3"
 author: "Jason Lo"
-date: "20210806"
+date: "20210812"
 output:
   html_document:
     df_print: paged
@@ -112,6 +112,8 @@ fig3 <- interaction_plots[8][[1]] +
   theme_minimal()
 
 ggsave("../../results/figure3.jpg", width = 5, height=3, dpi=600)
+
+fig3
 ```
 
 ## Supplementary statistics
@@ -157,12 +159,6 @@ my_lmer("Score ~ Lexicality", df_eot)
 
 
 ## Supplementary table 1
-
-Lexicality
-```{r}
-my_lmer("Score ~ Lexicality")
-```
-
 
 
 ### Word
